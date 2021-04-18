@@ -8,12 +8,12 @@ import re
 def main():
     listaMaquinas = list()
     listaFuncionarios = list()
-    print("################# TRABALHO 1 SISTEMAS OPERACIONAIS #################")
+    print("\n################# TRABALHO 1 SISTEMAS OPERACIONAIS #################")
 
     numeroDeMaquinas = int(input("\nDigite o número de máquinas: "))
 
     for maquina in range(numeroDeMaquinas):
-        idMaquina = input("\nDigite o identificador da máquina %i : " %(maquina+1))
+        idMaquina = input("\nDigite o identificador da máquina %i: " %(maquina+1))
         listaMaquinas.append(Maquina(idMaquina))
 
     tamanhoFila = int(input("\nDigite a capacidade da fila de tarefas: "))

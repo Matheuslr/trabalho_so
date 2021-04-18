@@ -17,7 +17,7 @@ class Funcionario:
                 for index, line in enumerate(self.tarefas):
                     self.tarefas[index] = line.strip()
         except Exception as err:
-            print (f"funcionário {idFuncionario} não existe.")
+            print (f"funcionário {self.idFuncionario} não existe.")
     
 
     def pegarTarefa(self):
