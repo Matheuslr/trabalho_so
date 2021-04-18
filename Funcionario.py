@@ -4,8 +4,10 @@ class Funcionario:
         self.idFuncionario = idFuncionario
         self.tarefas = []
 
+
     def getTamanho(self):
         return len(self.tarefas)
+
 
     def lerTarefas(self):
         try:

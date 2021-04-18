@@ -1,4 +1,5 @@
 class FilaTarefas:
+    
     def __init__(self, tamanho):
         self.fila = []
     
@@ -11,6 +12,7 @@ class FilaTarefas:
         if len(self.fila) < 1:
             return None
         return self.fila.pop(0)
+
 
     def getTamanho(self):
         tamanho = 0
