@@ -1,39 +1,62 @@
 from Funcionario import Funcionario
 from FilaTarefas import FilaTarefas
 from Maquina import Maquina
+from utils import estaDisponivel, temTarefa
 
-listaTarefas = list()
+import re
 
-listaMaquinas = list()
-listaFuncionarios = list()
-print("################# TRABALHO 1 SISTEMAS OPERACIONAIS #################")
+def main():
+    listaMaquinas = list()
+    listaFuncionarios = list()
+    print("################# TRABALHO 1 SISTEMAS OPERACIONAIS #################")
 
-numeroDeMaquinas = int(input("\n Digite o número de máquinas "))
+    numeroDeMaquinas = int(input("\nDigite o número de máquinas: "))
 
-for maquina in range(numeroDeMaquinas):
-    idMaquina = input("\n Digite o identificador da máquina %i : " %(ma+1))
-    listaMaquinas.append(Maquina(idMaquina))
+    for maquina in range(numeroDeMaquinas):
+        idMaquina = input("\nDigite o identificador da máquina %i : " %(maquina+1))
+        listaMaquinas.append(Maquina(idMaquina))
 
-tamanhoFila = int(input("\n Digite a capacidade da fila de tarefas: "))
+    tamanhoFila = int(input("\nDigite a capacidade da fila de tarefas: "))
 
-numFuncionarios = int(input("\n Digite o número de funcionários: "))
+    numFuncionarios = int(input("\nDigite o número de funcionários: "))
+    print("\n")
 
-for funcionarioNumber in range(numFuncionarios):
-    with open(f"func{funcionarioNumber+1}.txt", 'r') as file:
-        print(f"Arquivo do funcionario {funcionarioNumber+1}: func{funcionarioNumber+1}.txt")
-        funcionario = Funcionario(funcionarioNumber+1)
+    for funcionarioNumber in range(numFuncionarios):
+        funcionario = Funcionario(f"func{funcionarioNumber+1}")
+        funcionario.lerTarefas()
         listaFuncionarios.append(funcionario)
 
-filaTarefas = FilaTarefas(tamanhoFila)
+    filaTarefas = FilaTarefas(tamanhoFila)
 
+    totalTarefas = 0
+    for funcionario in listaFuncionarios:
+        totalTarefas += len(funcionario.tarefas)
+    
+    while filaTarefas.getTamanho() < tamanhoFila:
+        for funcionario in listaFuncionarios:
+            if (len(funcionario.tarefas) > 0):
+                tarefa = {
+                    "descricao": funcionario.pegarTarefa(),
+                    "funcionario": funcionario.idFuncionario
+                }
+                filaTarefas.inserir(tarefa)
+        if(filaTarefas.getTamanho() == totalTarefas):
+            break
 
-for funcionario in listaFuncionarios:
-    if len(funcionario.tarefa) > 0 :
-        while len(filaTarefas) == tamanhoFila:
-            tarefa = funcionario.pegarTarefa()
+    if(filaTarefas.getTamanho() == 0):
+        return 0
 
-
-def pegarTarefaDaFila():
-    #pegar Primeira Tarefa Da Fila De Tarefas
-    #jogar Tarefa Na Maquina
-    pegarTarefaDoFuncionario()
+    while True:
+        maquina = estaDisponivel(listaMaquinas)
+        if(maquina is not False):
+            tarefa = filaTarefas.remover()
+            if(tarefa):
+                maquina.setTarefa(int(re.sub("(produto[0-9] )", "", tarefa["descricao"])))
+                maquina.inserirTarefaNaMaquina(tarefa)
+            novaTarefa = temTarefa(listaFuncionarios)
+            if not novaTarefa and filaTarefas.getTamanho() == 0:
+                break
+            filaTarefas.inserir(novaTarefa)
+    
+if __name__ == '__main__':
+    main()
